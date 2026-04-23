@@ -41,10 +41,14 @@ The home page loads `dexa_scans` for the signed-in member (RLS) in `getMemberSca
 
 The same snapshot drives **persona-specific layouts** (not generic empty charts for first-time members): **first scan** uses education-first copy and per-metric definitions (no “trend” line); **second scan** uses a comparison hero plus full table; **3+** uses first-to-latest narrative, body fat % and lean mass trends, a quick delta for the last two visits, and the full table.
 
-## PDF upload (Phase 5)
+## DEXA scan PDF upload (Phase 5)
+
+Signed-in members can add a new body-composition point by uploading a **DEXA report PDF** from the home dashboard (**Upload a DEXA report (PDF)**). The flow is server-only: the PDF bytes are read once to extract text, metrics are parsed, a row is written to `dexa_scans`, and optionally a copy of the file is stored under the user’s private prefix in Supabase Storage.
+
+**Sample PDFs for testing:** six example DEXA report files live in the repo at `public/samples/dexa`. Use them locally to try the uploader and parser without real data. When `pnpm dev` is running, they are also available under `/samples/dexa/` in the browser (e.g. `http://localhost:3000/samples/dexa/<filename>.pdf`).
 
 1. Apply the storage migration as well (creates the private `dexa-reports` bucket and RLS for `storage.objects` so each user can only read/write `/{auth.uid()}/...`).
-2. **Upload scan** in the app: choose a text-based PDF; the server uses `pdf-parse` to extract text, then `lib/dexa/parse-dexa-text.ts` runs:
+2. In the app, select a text-based PDF and submit **Upload and parse**. The server uses `pdf-parse` to extract text, then `lib/dexa/parse-dexa-text.ts` runs:
    - **Layout A** — common clinical labels (body fat %, total mass, lean, fat, BMC, visceral).
    - **Layout B** — alternate labels (PBF, TBM, FFM, FM) and looser token order.
    - **Heuristic** — keyword + unit patterns when table order breaks in the text layer.

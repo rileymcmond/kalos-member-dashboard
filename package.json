@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "next start",
     "db:seed": "node ./scripts/seed-demo-data.mjs",
-    "generate:sample-dexa-pdf": "node ./scripts/generate-sample-dexa-pdf.mjs"
+    "generate:sample-dexa-pdf": "node ./scripts/generate-sample-dexa-pdfs.mjs",
+    "verify:sample-dexa-pdf": "npx --yes tsx ./scripts/verify-sample-dexa-pdfs.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
